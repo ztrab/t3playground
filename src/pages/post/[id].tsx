@@ -10,7 +10,6 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import Image from "next/image";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import Link from "next/link";
 dayjs.extend(relativeTime);
 
 const CreatePostWizard = () => {
@@ -83,12 +82,7 @@ const PostView = (props: PostWithUser) => {
       <Image src={author.profilePicture} className="w-14 h-14 rounded-full" alt="profile image" width={56} height={56} />
       <div className="flex flex-col">
         <div className="flex text-slate-300 gap-1">
-          <Link href={`/@${author.username} `}>
-            <span>{`@${author.username} `} </span>
-          </Link>
-          <Link href={`/post/${post.id} `}>
-            <span> {` · ${dayjs(post.createdAt).fromNow()}`}</span>
-          </Link>
+          <span>{`@${author.username} `} </span><span> {` · ${dayjs(post.createdAt).fromNow()}`}</span>
         </div>
         <span className="text-xl">{post.content}</span>
       </div>
@@ -113,7 +107,7 @@ const Feed = () => {
   );
 }
 
-const Home: NextPage = () => {
+const SinglePostPage: NextPage = () => {
   const { isLoaded: userLoaded, isSignedIn } = useUser();
 
   //Start fetching asap bc cache
@@ -130,20 +124,10 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex justify-center h-screen">
-        <div className="border-x border-slate-400 w-full h-full md:max-w-2xl">
-          <div className="flex border-b border-slate-400 p-4">
-            {!isSignedIn && 
-              <div className="flex justify-center">
-                <SignInButton />
-              </div>
-            } 
-            {isSignedIn && <CreatePostWizard />}
-          </div>
-          <Feed />
-        </div>
+        <div>Post View</div>
       </main>
     </>
   );
 };
 
-export default Home;
+export default SinglePostPage;
