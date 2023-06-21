@@ -2,6 +2,25 @@ import type { GetStaticProps, NextPage } from "next";
 import Head from "next/head";
 import { api } from "~/utils/api";
 import { PageLayout } from "~/components/layout";
+import { PostView } from "~/components/postView";
+
+const ProfileFeed = (props: {userId: string}) => {
+  const { data, isLoading } = api.posts.getPostsByUserId.useQuery({
+    userId: props.userId,
+  });
+
+  if(isLoading) return <LoadingPage />;
+
+  if(!data || !data.length) return <div>User has not posted</div>;
+
+  return (
+    <div className="flex flex-col">
+      {data.map((fullPost) => (
+        <PostView {...fullPost} key={fullPost.post.id} />
+      ))}
+    </div>
+  );
+};
 
 const ProfilePage: NextPage<{username: string}> = ({ username }) => {
 
@@ -29,6 +48,7 @@ const ProfilePage: NextPage<{username: string}> = ({ username }) => {
         <div className="h-[64px]"></div>
         <div className="p-4 text-xl font-bold">{`@${ data.username ?? ""}`}</div>
         <div className="border-b border-slate-400"></div>
+        <ProfileFeed userId={data.id} />
       </PageLayout>
     </>
   );
@@ -39,6 +59,7 @@ import { prisma } from "~/server/db";
 import { appRouter } from "~/server/api/root";
 import superjson from "superjson";
 import Image from "next/image";
+import { LoadingPage } from "~/components/loading";
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const ssg = createProxySSGHelpers({
