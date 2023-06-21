@@ -27,7 +27,8 @@ const ProfilePage: NextPage<{username: string}> = ({ username }) => {
           />
         </div>
         <div className="h-[64px]"></div>
-        <div className="p-4 text-xl font-bold border-b border-slate-400">{`@${ data.username}`}</div>
+        <div className="p-4 text-xl font-bold">{`@${ data.username ?? ""}`}</div>
+        <div className="border-b border-slate-400"></div>
       </PageLayout>
     </>
   );
